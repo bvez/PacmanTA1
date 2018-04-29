@@ -73,6 +73,10 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
+	#problem es de la clase SearchProblem definido en este archivo
+	#problem es de una clase genérica que puede ser FoodSearchProblem, PositionSearchProblem y CornersProblem
+	#definidos en searchAgents.py
+
     """
     Search the deepest nodes in the search tree first.
 
@@ -87,6 +91,23 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+    print "Start:", problem.getStartState()
+    #Se está utilizando como referencia el código de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computación(Inteligencia Artificial)"
+    #Del profesor Edwin Villanueva Talavera
+    nodeState = problem.getStartState();
+    frontier = Stack()
+    explored = []
+
+    while True:
+    	if (frontier.isEmpty()) return None;
+    	nodeState = frontier.pop();
+    	if(problem.isGoalState(node.state)):
+    		return #el camino para llegar hasta este nodo
+    	explored.append(node.state)
+
+
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
