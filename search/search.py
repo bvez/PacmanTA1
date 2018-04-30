@@ -74,7 +74,7 @@ def tinyMazeSearch(problem):
 
 def depthFirstSearch(problem):
 	#problem es de la clase SearchProblem definido en este archivo
-	#problem es de una clase genérica que puede ser FoodSearchProblem, PositionSearchProblem y CornersProblem
+	#problem es de una clase generica que puede ser FoodSearchProblem, PositionSearchProblem y CornersProblem
 	#definidos en searchAgents.py
 
     """
@@ -92,15 +92,15 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     print "Start:", problem.getStartState()
-    #Se está utilizando como referencia el código de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computación(Inteligencia Artificial)"
+    #Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
     #Del profesor Edwin Villanueva Talavera
     nodeState = problem.getStartState()
     nodeParent = None
     nodeAction = None
     tNode = (nodeState,nodeParent,nodeAction)
 
-    frontierNode = Stack()
-    frontierState = Stack()
+    frontierNode = util.Stack()
+    frontierState = util.Stack()
     frontierNode.push(tNode)
     frontierState.push(nodeState)
 
@@ -122,7 +122,8 @@ def depthFirstSearch(problem):
     		childParent = tNode
     		childAction = action[1]
     		childNode = (childState,childParent,childAction)
-    		if (childState not in explored) or (childState not in frontierState):
+    		if (childState not in explored):
+    			#or (childState not in frontierState):
     			frontierNode.push(childNode)
     			frontierState.push(childState)
 
