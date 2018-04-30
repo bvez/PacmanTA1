@@ -337,7 +337,7 @@ class CornersProblem(search.SearchProblem):
             nextx, nexty = int(x + dx), int(y + dy)
             if (self.walls[nextx][nexty]):
 
-
+            #Hola
                 successors.append
             "*** YOUR CODE HERE ***"
 
