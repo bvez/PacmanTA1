@@ -95,24 +95,45 @@ def depthFirstSearch(problem):
     #Se está utilizando como referencia el código de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computación(Inteligencia Artificial)"
     #Del profesor Edwin Villanueva Talavera
     nodeState = problem.getStartState()
-    frontier = Stack()
+    nodeParent = None
+    nodeAction = None
+    tNode = (nodeState,nodeParent,nodeAction)
+
+    frontierNode = Stack()
+    frontierState = Stack()
+    frontierNode.push(tNode)
+    frontierState.push(nodeState)
+
     explored = []
-
-    while True:
-    	if (frontier.isEmpty()) return None;
-    	nodeState = frontier.pop();
-    	if(problem.isGoalState(nodeState)):
-    		return #el camino para llegar hasta este nodo
-    	explored.append(nodeState)
-    	for action in problem.getSuccessors(nodeState) :
-    		child = 
-    		if child not in explored or not in frontier:
-    			frontier.pop(child)
-
-
+    
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    util.raiseNotDefined()
+
+    while True:
+    	if (frontierState.isEmpty()):
+    		return None
+    	tNode = frontierNode.pop()
+    	if(problem.isGoalState(tNode[0])):
+    		break
+
+    	explored.append(tNode[0])
+    	for action in problem.getSuccessors(tNode[0]) :
+    		childState = action[0]
+    		childParent = tNode
+    		childAction = action[1]
+    		childNode = (childState,childParent,childAction)
+    		if (childState not in explored) or (childState not in frontierState):
+    			frontierNode.push(childNode)
+    			frontierState.push(childState)
+
+
+    result = []
+    while tNode[1] is not None:
+    	result.insert(0,tNode[2]) #se coloca de forma invertida
+    	tNode = tNode[1]
+
+    return result
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
