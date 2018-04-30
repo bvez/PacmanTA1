@@ -122,8 +122,7 @@ def depthFirstSearch(problem):
     		childParent = tNode
     		childAction = action[1]
     		childNode = (childState,childParent,childAction)
-    		if (childState not in explored):
-    			#or (childState not in frontierState):
+    		if (childState not in explored) or (childState not in frontierState.list):
     			frontierNode.push(childNode)
     			frontierState.push(childState)
 
