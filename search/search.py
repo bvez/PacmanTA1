@@ -94,16 +94,20 @@ def depthFirstSearch(problem):
     print "Start:", problem.getStartState()
     #Se está utilizando como referencia el código de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computación(Inteligencia Artificial)"
     #Del profesor Edwin Villanueva Talavera
-    nodeState = problem.getStartState();
+    nodeState = problem.getStartState()
     frontier = Stack()
     explored = []
 
     while True:
     	if (frontier.isEmpty()) return None;
     	nodeState = frontier.pop();
-    	if(problem.isGoalState(node.state)):
+    	if(problem.isGoalState(nodeState)):
     		return #el camino para llegar hasta este nodo
-    	explored.append(node.state)
+    	explored.append(nodeState)
+    	for action in problem.getSuccessors(nodeState) :
+    		child = 
+    		if child not in explored or not in frontier:
+    			frontier.pop(child)
 
 
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
