@@ -64,8 +64,8 @@ class GameState:
   ####################################################
   # Accessor methods: use these to access state data #
   ####################################################
-  
-  # static variable keeps track of which states have had getLegalActions called 
+
+  # static variable keeps track of which states have had getLegalActions called
   explored = set()
   def getAndResetExplored():
       tmp = GameState.explored.copy()
@@ -511,7 +511,7 @@ def readCommand( argv ):
                     help=default('How many episodes are training (suppresses output)'), default=0)
   parser.add_option('--frameTime', dest='frameTime', type='float',
                     help=default('Time to delay between frames; <0 means keyboard'), default=0.1)
-  parser.add_option('-c', '--catchExceptions', action='store_true', dest='catchExceptions', 
+  parser.add_option('-c', '--catchExceptions', action='store_true', dest='catchExceptions',
                     help='Turns on exception handling and timeouts during games', default=False)
   parser.add_option('--timeout', dest='timeout', type='int',
                     help=default('Maximum length of time an agent can spend computing in a single game'), default=30)

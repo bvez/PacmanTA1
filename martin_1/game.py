@@ -9,7 +9,7 @@
 from util import *
 import time, os
 import traceback
-  
+
 #######################
 # Parts worth reading #
 #######################
@@ -480,7 +480,7 @@ class GameStateData:
         else: numGhosts += 1
       self.agentStates.append( AgentState( Configuration( pos, Directions.STOP), isPacman) )
     self._eaten = [False for a in self.agentStates]
-  
+
 class Game:
   """
   The Game manages the control flow, soliciting actions from agents.
@@ -694,4 +694,3 @@ class Game:
           self.unmute()
           return
     self.display.finish()
-

@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -105,7 +105,7 @@ def depthFirstSearch(problem):
     frontierState.push(nodeState)
 
     explored = []
-    
+
     #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
@@ -117,7 +117,7 @@ def depthFirstSearch(problem):
     		return solution(tNode)
 
     	explored.append(tNode[0])
-    	
+
         for action in problem.getSuccessors(tNode[0]) :
     		childState = action[0]
     		childParent = tNode
@@ -146,7 +146,7 @@ def breadthFirstSearch(problem):
     frontierState.push(nodeState)
 
     explored = []
-    
+
     #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
@@ -158,13 +158,13 @@ def breadthFirstSearch(problem):
             return solution(tNode)
 
         explored.append(tNode[0])
-        
+
         for action in problem.getSuccessors(tNode[0]) :
             childState = action[0]
             childParent = tNode
             childAction = action[1]
             childNode = (childState,childParent,childAction)
-            if (childState not in explored) and (childState not in frontierState.list):
+            if (childState not in explored) or (childState not in frontierState.list):
                 frontierNode.push(childNode)
                 frontierState.push(childState)
 
