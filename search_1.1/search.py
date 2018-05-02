@@ -188,16 +188,18 @@ def uniformCostSearch(problem):
     tNode = (nodeState,nodeParent,nodeAction,nodeCost)
 
     frontierNode = util.PriorityQueue()
-    frontierState = util.PriorityQueue()
+    frontierStateAction = util.PriorityQueue()
     frontierNode.push(tNode,nodeCost)
-    frontierState.push(nodeState,nodeCost)
+    frontierStateAction.push((nodeState,nodeAction),nodeCost)
 
     explored = []
 
     while True:
-        if frontierState.isEmpty():
+        if frontierStateAction.isEmpty():
             return None
+        
         tNode = frontierNode.pop()
+        
         if(problem.isGoalState(tNode[0])):
             return solution(tNode)
 
@@ -212,10 +214,10 @@ def uniformCostSearch(problem):
 
             
             
-            if (childState not in explored) or (childState not in frontierState.list):
-                frontierState.push(childState,)
+            if (childState not in explored) or (childState not in frontierStateAction.list):
+                frontierStateAction.push(childState,)
                 frontierNode.push(childNode,childCost)
-            else if childState in frontierState:
+            else if childState in frontierStateAction:
 
 
     #util.raiseNotDefined()
