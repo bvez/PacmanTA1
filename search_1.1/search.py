@@ -180,7 +180,8 @@ def solution(node):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    """nodeState = problem.getStartState()
+    
+    nodeState = problem.getStartState()
     nodeParent = None
     nodeAction = None
     nodeCost = 0
@@ -206,17 +207,15 @@ def uniformCostSearch(problem):
             childState = action[0] #0 state, 1 action, 2 cost
             childAction = action[1]
             childParent = tNode
-            childCost = action[2]
+            childCost = problem.getCostOfActions(childAction)
             childNode = (childState,childParent,childAction,childCost)
 
+            
+            
             if (childState not in explored) or (childState not in frontierState.list):
-                frontierState.append(childState)
-                frontierNode.append(childNode)
+                frontierState.push(childState,)
+                frontierNode.push(childNode,childCost)
             else if childState in frontierState:
-
-                """
-
-                
 
 
     #util.raiseNotDefined()
