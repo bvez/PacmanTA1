@@ -181,9 +181,9 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     
-    nodeState = problem.getStartState()
+    """nodeState = problem.getStartState()
     nodeParent = None
-    nodeAction = None
+    nodeAction = []
     nodeCost = 0
     tNode = (nodeState,nodeParent,nodeAction,nodeCost)
 
@@ -207,19 +207,73 @@ def uniformCostSearch(problem):
 
         for action in problem.getSuccessors(tNode[0]):
             childState = action[0] #0 state, 1 action, 2 cost
-            childAction = action[1]
-            childParent = tNode
-            childCost = problem.getCostOfActions(childAction)
-            childNode = (childState,childParent,childAction,childCost)
+            tNode[2].append(action[1])
+            childAction = tNode[2]
+            childParent = tNode            
 
-            
-            
-            if (childState not in explored) or (childState not in frontierStateAction.list):
-                frontierStateAction.push(childState,)
+            if (childState not in explored) or (childState not in frontierStateAction.heap):
+                childCost = problem.getCostOfActions(childAction)
+                childNode = (childState,childParent,childAction,childCost)
+
+                frontierStateAction.push(childState,childCost)
                 frontierNode.push(childNode,childCost)
-            else if childState in frontierStateAction:
+            elif childState in frontierStateAction.heap:
+                childCost = problem.getCostOfActions(childAction)
+                childNode = (childState,childParent,childAction,childCost)
+
+                frontierNode.push(childNode,childCost)
+                frontierState.push(childState,childCost)"""
 
 
+    start = problem.getStartState()
+    exploredState = []
+    states = util.PriorityQueue()
+    states.push((start, []) ,0)
+    while not states.isEmpty():
+        state, actions = states.pop()
+        if problem.isGoalState(state):
+            return actions
+        if state not in exploredState:
+            successors = problem.getSuccessors(state)
+            for succ in successors:
+                coordinates = succ[0]
+                if coordinates not in exploredState:
+                    directions = succ[1]
+                    newCost = actions + [directions]
+                    states.push((coordinates, actions + [directions]), problem.getCostOfActions(newCost))
+        exploredState.append(state)
+    return actions
+
+    
+
+
+
+
+
+
+
+    start = problem.getStartState()
+    exploredState = []
+    states = util.PriorityQueue()
+    states.push((start, []) ,0)
+    while true:
+        if states.isEmpty():
+            return None
+
+        state, actions = states.pop()
+
+        if problem.isGoalState(state):
+            return actions
+        if state not in exploredState:
+            successors = problem.getSuccessors(state)
+            for succ in successors:
+                coordinates = succ[0]
+                if coordinates not in exploredState:
+                    directions = succ[1]
+                    newCost = actions + [directions]
+                    states.push((coordinates, actions + [directions]), problem.getCostOfActions(newCost))
+        exploredState.append(state)
+    return actions
     #util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
