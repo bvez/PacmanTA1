@@ -180,101 +180,35 @@ def solution(node):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    
-    """nodeState = problem.getStartState()
-    nodeParent = None
-    nodeAction = []
-    nodeCost = 0
-    tNode = (nodeState,nodeParent,nodeAction,nodeCost)
-
-    frontierNode = util.PriorityQueue()
-    frontierStateAction = util.PriorityQueue()
-    frontierNode.push(tNode,nodeCost)
-    frontierStateAction.push((nodeState,nodeAction),nodeCost)
-
     explored = []
+    frontier = util.PriorityQueue()
+    tNode = (problem.getStartState(),[]) #el nodo se compone de estado y acciones realizadas hasta ahora
+    frontier.push( tNode , 0) #se inserta en la cola de prioridad con un costo 0
 
-    while True:
-        if frontierStateAction.isEmpty():
-            return None
-        
-        tNode = frontierNode.pop()
-        
-        if(problem.isGoalState(tNode[0])):
-            return solution(tNode)
+    while(True):
+    	if(frontier.isEmpty()):
+    		return None
 
-        explored.append(tNode[0])
+    	tNode = frontier.pop()
+    	if(problem.isGoalState(tNode[0])):
+    		return tNode[1] #se retorna la lista de acciones #probar cambios
 
-        for action in problem.getSuccessors(tNode[0]):
-            childState = action[0] #0 state, 1 action, 2 cost
-            tNode[2].append(action[1])
-            childAction = tNode[2]
-            childParent = tNode            
+    	if tNode[0] not in explored:
+    		successors = problem.getSuccessors(tNode[0])
+    		for action in successors:
+    			nextState = action[0]
+    			
+    			if nextState not in explored:
+    				newAction = action[1]
+    				newActionList = tNode[1] + [newAction] #se anade la accion realizada a lista de acciones del nodo
+    				newNode = (nextState,newActionList)
+    				frontier.push(newNode,problem.getCostOfActions(newActionList))
 
-            if (childState not in explored) or (childState not in frontierStateAction.heap):
-                childCost = problem.getCostOfActions(childAction)
-                childNode = (childState,childParent,childAction,childCost)
+    	explored.append(tNode[0]) #se anade el estado revisado a la lista de explorados
 
-                frontierStateAction.push(childState,childCost)
-                frontierNode.push(childNode,childCost)
-            elif childState in frontierStateAction.heap:
-                childCost = problem.getCostOfActions(childAction)
-                childNode = (childState,childParent,childAction,childCost)
-
-                frontierNode.push(childNode,childCost)
-                frontierState.push(childState,childCost)"""
+    return None
 
 
-    start = problem.getStartState()
-    exploredState = []
-    states = util.PriorityQueue()
-    states.push((start, []) ,0)
-    while not states.isEmpty():
-        state, actions = states.pop()
-        if problem.isGoalState(state):
-            return actions
-        if state not in exploredState:
-            successors = problem.getSuccessors(state)
-            for succ in successors:
-                coordinates = succ[0]
-                if coordinates not in exploredState:
-                    directions = succ[1]
-                    newCost = actions + [directions]
-                    states.push((coordinates, actions + [directions]), problem.getCostOfActions(newCost))
-        exploredState.append(state)
-    return actions
-
-    
-
-
-
-
-
-
-
-    start = problem.getStartState()
-    exploredState = []
-    states = util.PriorityQueue()
-    states.push((start, []) ,0)
-    while true:
-        if states.isEmpty():
-            return None
-
-        state, actions = states.pop()
-
-        if problem.isGoalState(state):
-            return actions
-        if state not in exploredState:
-            successors = problem.getSuccessors(state)
-            for succ in successors:
-                coordinates = succ[0]
-                if coordinates not in exploredState:
-                    directions = succ[1]
-                    newCost = actions + [directions]
-                    states.push((coordinates, actions + [directions]), problem.getCostOfActions(newCost))
-        exploredState.append(state)
-    return actions
-    #util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -337,7 +271,7 @@ def depthLimitedSearch(problem,limit):
     return recursiveDLS(node,problem,limit,explored)
 
 def iDeepeningSearch(problem):
-    depth = 0
+    depth = 190
     while True:
         result = depthLimitedSearch(problem,depth)
         depth += 1
