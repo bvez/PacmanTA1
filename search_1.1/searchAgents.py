@@ -185,7 +185,7 @@ class PositionSearchProblem(search.SearchProblem):
 
     def isGoalStateInv(self, state):
         
-        isGoal = state == self.start
+        isGoal = state == self.startState
 
         # For display purposes only
         if isGoal and self.visualize:
@@ -227,8 +227,8 @@ class PositionSearchProblem(search.SearchProblem):
 
         return successors
 
-    def getSuccesorsInv(self,state):
-        return getSuccessors(self,state)
+    def getSuccessorsInv(self,state):
+        return self.getSuccessors(state)
 
     def getCostOfActions(self, actions):
         """
@@ -380,10 +380,10 @@ class CornersProblem(search.SearchProblem):
 	            for i in range(len(state[1])):
 	                listaEsquinas.append(state[1][i])
 
-	            for esquinas in state[1]:
-                    if esquinas[0] == nextx and nexty == esquinas[1]:
-                        listaEsquinas.remove((nextx,nexty))
-                        #append
+	            for esquinas in (state[1]):
+	                if (esquinas[0] == nextx) and (nexty == esquinas[1]):
+						listaEsquinas.remove((nextx,nexty))
+
 
 	            nextState = ((nextx,nexty),listaEsquinas)                                                                     
 	            successors.append((nextState,action,1))
@@ -393,7 +393,7 @@ class CornersProblem(search.SearchProblem):
         return successors
 
     def getSuccessorsInv(self, state):
-         x,y = state[0]        
+        x,y = state[0]        
         successors = []
 
 

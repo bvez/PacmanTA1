@@ -297,8 +297,8 @@ def bidirectionalSearch(problem):
 
     explored = []
 
-    node1 = (None,[])
-    node2 = (None,[])
+    node1 = (problem.getStartState(),[])
+    node2 = (problem.getStartStateInv(),[])
 
     while True:
         if (frontierNodeInitial.isEmpty() or frontierNodeGoal.isEmpty()):
@@ -321,7 +321,7 @@ def bidirectionalSearch(problem):
         	if problem.isGoalStateInv(node2[0]) or (node2 in frontierNodeInitial.list):
         		return node1[1]+node2[1]
         	for action in problem.getSuccessorsInv(node2[0]):
-        		node1 = (action[0],   )#completar la lista de acciones
+        		node1 = (action[0], node2[1] + [action[1]])#completar la lista de acciones
         		if node1[0] not in explored:
         			explored.append(node1[0])
         			frontierNodeGoal.push(node1[0])
