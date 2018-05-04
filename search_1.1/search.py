@@ -281,38 +281,52 @@ def iDeepeningSearch(problem):
 
 
 def bidirectionalSearch(problem):
-    nodeState = problem.getStartState()
-    nodeParent = None
-    nodeAction = None
-    tNode = (nodeState,nodeParent,nodeAction)
+	#Se esta utilizando como referencial el pseudocodigo de Bidirectional Search
+	#de la pagina web http://planning.cs.uiuc.edu/node50.html visitado el dia jueves 3 de mayo
+    nodeStateInitial = problem.getStartState()
+    tNodeInitial = (nodeStateInitial,[])
 
-    frontierNode = util.Queue()
-    frontierState = util.Queue()
-    frontierNode.push(tNode)
-    frontierState.push(nodeState)
+    nodeStateGoal = problem.getStartStateInv()
+    tNodeGoal = (nodeStateGoal,[])
+
+    frontierNodeInitial = util.Queue()
+    frontierNodeGoal = util.Queue()
+
+    frontierNodeInitial.push(tNodeInitial)
+    frontierNodeGoal.push(tNodeGoal)
 
     explored = []
-    
-    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+
+    node1 = (None,[])
+    node2 = (None,[])
 
     while True:
-        if (frontierState.isEmpty()):
+        if (frontierNodeInitial.isEmpty() or frontierNodeGoal.isEmpty()):
             return None
-        tNode = frontierNode.pop()
-        if(problem.isGoalState(tNode[0])):
-            return solution(tNode)
-
-        explored.append(tNode[0])
         
-        for action in problem.getSuccessors(tNode[0]) :
-            childState = action[0]
-            childParent = tNode
-            childAction = action[1]
-            childNode = (childState,childParent,childAction)
-            if (childState not in explored) and (childState not in frontierState.list):
-                frontierNode.push(childNode)
-                frontierState.push(childState)
+        if not(frontierNodeInitial.isEmpty()):
+        	node1 = frontierNodeInitial.pop()
+        	if problem.isGoalState(node1[0]) or (node1 in frontierNodeGoal.list): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
+        		return node1[1]+node2[1]
+        	for action in problem.getSuccessors(node1[0]):
+        		node2 = (action[0], node1[1] + [action[1]]) #completar la lista de acciones
+        		if node2[0] not in explored:
+        			explored.append(node2[0])
+        			frontierNodeInitial.push(node2)
+        		#else:
+        			#resolve duplicate node2
+
+        if not(frontierNodeGoal.isEmpty()):
+        	node2 = frontierNodeGoal.pop()
+        	if problem.isGoalStateInv(node2[0]) or (node2 in frontierNodeInitial.list):
+        		return node1[1]+node2[1]
+        	for action in problem.getSuccessorsInv(node2[0]):
+        		node1 = (action[0],   )#completar la lista de acciones
+        		if node1[0] not in explored:
+        			explored.append(node1[0])
+        			frontierNodeGoal.push(node1[0])
+        		#else:
+        			#resolve duplicate node1
     return None
 
 

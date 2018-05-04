@@ -167,8 +167,25 @@ class PositionSearchProblem(search.SearchProblem):
     def getStartState(self):
         return self.startState
 
+    def getStartStateInv(self):
+        return self.goal
+
     def isGoalState(self, state):
         isGoal = state == self.goal
+
+        # For display purposes only
+        if isGoal and self.visualize:
+            self._visitedlist.append(state)
+            import __main__
+            if '_display' in dir(__main__):
+                if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+                    __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+
+        return isGoal
+
+    def isGoalStateInv(self, state):
+        
+        isGoal = state == self.start
 
         # For display purposes only
         if isGoal and self.visualize:
@@ -209,6 +226,9 @@ class PositionSearchProblem(search.SearchProblem):
             self._visitedlist.append(state)
 
         return successors
+
+    def getSuccesorsInv(self,state):
+        return getSuccessors(self,state)
 
     def getCostOfActions(self, actions):
         """
@@ -296,7 +316,13 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return (self.startingPosition,[self.corners[0],self.corners[1],self.corners[2],self.corners[3]])
+        #el estado inicial se compone de la posicion inicial Y de las esquinas que le faltan visitar
+        return (self.startingPosition,[self.corners[0],self.corners[1],self.corners[2],self.corners[3] ])
+        #return (self.starting position,[])
+
+
+    def getStartStateInv(self):
+        return (self.startingPosition,[])
 
     def isGoalState(self, state):
         """
@@ -315,6 +341,12 @@ class CornersProblem(search.SearchProblem):
 
         "*** YOUR CODE HERE ***"
 
+    def isGoalStateInv(self,state):
+        if(len(state[1]) == 4) and ( (self.posIniX,self.posIniY) == state[0] ):
+            return True
+
+        return False
+
     def getSuccessors(self, state):
         """
         Returns successor states, the actions they require, and a cost of 1.
@@ -325,9 +357,9 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        x,y = state[0]
-        #print(state[0])
+        x,y = state[0]        
         successors = []
+
 
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -341,21 +373,54 @@ class CornersProblem(search.SearchProblem):
             nextx, nexty = int(x + dx), int(y + dy)
 
             if not(self.walls[nextx][nexty]):
-	            #print "next" ,(nextx,nexty)
-	            estadoNuevo=[]
+	            
+	            listaEsquinas=[]
+                #se usa el listaEsquinas para no modificar el state[1], que seria la lista de
+                #esquinas NO EXPLORADAS por el momento, parecido a deepcopy
 	            for i in range(len(state[1])):
-	                estadoNuevo.append(state[1][i])
-	            for esquinas in state[1] :
-	                if esquinas[0] == nextx and nexty == esquinas[1]:
-	                    estadoNuevo.remove((nextx,nexty))
-	            actionSucc = ((nextx,nexty),estadoNuevo)
-	            successors.append((actionSucc,action,1))
+	                listaEsquinas.append(state[1][i])
+
+	            for esquinas in state[1]:
+                    if esquinas[0] == nextx and nexty == esquinas[1]:
+                        listaEsquinas.remove((nextx,nexty))
+                        #append
+
+	            nextState = ((nextx,nexty),listaEsquinas)                                                                     
+	            successors.append((nextState,action,1))
 
             "*** YOUR CODE HERE ***"
-
         self._expanded += 1 # DO NOT CHANGE
-        #print(successors)
         return successors
+
+    def getSuccessorsInv(self, state):
+         x,y = state[0]        
+        successors = []
+
+
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+
+            if not(self.walls[nextx][nexty]):
+                
+                listaEsquinas=[]
+                for i in range(len(state[1])):
+                    listaEsquinas.append(state[1][i])
+
+                for esquinas in self.corners:
+                #for esquinas in self.corners:
+                    if esquinas[0] == nextx and nexty == esquinas[1]:
+
+                        listaEsquinas.append((nextx,nexty))
+                        #append
+
+                nextState = ((nextx,nexty),listaEsquinas)                                                                     
+                successors.append((nextState,action,1))
+
+            "*** YOUR CODE HERE ***"
+        self._expanded += 1 # DO NOT CHANGE
+        return successors
+
 
     def getCostOfActions(self, actions):
         """
