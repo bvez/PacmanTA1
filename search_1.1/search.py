@@ -300,31 +300,44 @@ def bidirectionalSearch(problem):
     node1 = (problem.getStartState(),[])
     node2 = (problem.getStartStateInv(),[])
 
-    while True:
-        if (frontierNodeInitial.isEmpty() or frontierNodeGoal.isEmpty()):
-            return None
+    while not(frontierNodeInitial.isEmpty()) or not(frontierNodeGoal.isEmpty()):
+        """if (frontierNodeInitial.isEmpty() and frontierNodeGoal.isEmpty()):
+			print "sale"
+			return None
         
+        """
         if not(frontierNodeInitial.isEmpty()):
         	node1 = frontierNodeInitial.pop()
-        	if problem.isGoalState(node1[0]) or (node1 in frontierNodeGoal.list): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
+
+        	#for p in frontierNodeGoal.list :
+
+        	if problem.isGoalState(node1[0]) or (node1[0] in frontierNodeGoal.list): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
+        		print "resolvio1"
         		return node1[1]+node2[1]
-        	for action in problem.getSuccessors(node1[0]):
+        	sucesores = problem.getSuccessors(node1[0])
+        	print "1 Sucesores del estado ",node1[0],sucesores
+        	for action in sucesores:
         		node2 = (action[0], node1[1] + [action[1]]) #completar la lista de acciones
         		if node2[0] not in explored:
         			explored.append(node2[0])
         			frontierNodeInitial.push(node2)
+        			#print "frontera1 ",frontierNodeInitial.list
         		#else:
         			#resolve duplicate node2
 
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
         	if problem.isGoalStateInv(node2[0]) or (node2 in frontierNodeInitial.list):
+        		print "resolvio2"
         		return node1[1]+node2[1]
-        	for action in problem.getSuccessorsInv(node2[0]):
+        	sucesores = problem.getSuccessorsInv(node2[0])
+        	print "2 Sucesores del estado ",node2[0],sucesores
+        	for action in sucesores:
         		node1 = (action[0], node2[1] + [action[1]])#completar la lista de acciones
         		if node1[0] not in explored:
         			explored.append(node1[0])
-        			frontierNodeGoal.push(node1[0])
+        			frontierNodeGoal.push(node1)
+        			#print "frontera2 ",frontierNodeGoal.list
         		#else:
         			#resolve duplicate node1
     return None
