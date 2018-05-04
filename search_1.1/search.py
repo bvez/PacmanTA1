@@ -300,7 +300,7 @@ def bidirectionalSearch(problem):
     node1 = (problem.getStartState(),[])
     node2 = (problem.getStartStateInv(),[])
 
-    while not(frontierNodeInitial.isEmpty()) or not(frontierNodeGoal.isEmpty()):
+    while not(frontierNodeInitial.isEmpty()) and not(frontierNodeGoal.isEmpty()):
         """if (frontierNodeInitial.isEmpty() and frontierNodeGoal.isEmpty()):
 			print "sale"
 			return None
@@ -311,11 +311,14 @@ def bidirectionalSearch(problem):
 
         	#for p in frontierNodeGoal.list :
 
-        	if problem.isGoalState(node1[0]) or (node1[0] in frontierNodeGoal.list): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
+        	print "1 fronteraGoal",node1[0],[x[0] for x in frontierNodeGoal.list]
+        	print "se revisa el estado ",node1[0],"en la lista ",[x[0] for x in frontierNodeGoal.list]
+        	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
         		print "resolvio1"
         		return node1[1]+node2[1]
         	sucesores = problem.getSuccessors(node1[0])
-        	print "1 Sucesores del estado ",node1[0],sucesores
+        	print "sucesores1",node1[0],[x[0] for x in sucesores]
+        	#print "1 Sucesores del estado ",node1[0],sucesores
         	for action in sucesores:
         		node2 = (action[0], node1[1] + [action[1]]) #completar la lista de acciones
         		if node2[0] not in explored:
@@ -324,14 +327,17 @@ def bidirectionalSearch(problem):
         			#print "frontera1 ",frontierNodeInitial.list
         		#else:
         			#resolve duplicate node2
-
+		#print frontierNodeGoal.list
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
-        	if problem.isGoalStateInv(node2[0]) or (node2 in frontierNodeInitial.list):
+        	print "2 fronteraInitial",node2[0],[x[0] for x in frontierNodeInitial.list]
+        	print "se revisa el estado ",node2[0],"en la lista ",[x[0] for x in frontierNodeInitial.list]
+        	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
         		print "resolvio2"
         		return node1[1]+node2[1]
         	sucesores = problem.getSuccessorsInv(node2[0])
-        	print "2 Sucesores del estado ",node2[0],sucesores
+        	print "sucesores2",node2[0],[x[0] for x in sucesores]
+        	#print "2 Sucesores del estado ",node2[0],sucesores
         	for action in sucesores:
         		node1 = (action[0], node2[1] + [action[1]])#completar la lista de acciones
         		if node1[0] not in explored:
@@ -340,6 +346,7 @@ def bidirectionalSearch(problem):
         			#print "frontera2 ",frontierNodeGoal.list
         		#else:
         			#resolve duplicate node1
+	#if()
     return None
 
 
