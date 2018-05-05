@@ -73,10 +73,6 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
-	#problem es de la clase SearchProblem definido en este archivo
-	#problem es de una clase generica que puede ser FoodSearchProblem, PositionSearchProblem y CornersProblem
-	#definidos en searchAgents.py
-
     """
     Search the deepest nodes in the search tree first.
 
@@ -91,7 +87,6 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    print "Start:", problem.getStartState()
     #Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
     #Del profesor Edwin Villanueva Talavera
     nodeState = problem.getStartState()
@@ -130,43 +125,34 @@ def depthFirstSearch(problem):
     #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
-	"""Search the shallowest nodes in the search tree first."""
-	"*** YOUR CODE HERE ***"
-	print "Start:", problem.getStartState()
-	#Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
-	#Del profesor Edwin Villanueva Talavera
-	nodeState = problem.getStartState()
-	nodeParent = None
-	nodeAction = None
-	tNode = (nodeState,nodeParent,nodeAction)
-    
-	frontierNode = util.Queue()
-	frontierState = util.Queue()
-	frontierNode.push(tNode)
-	frontierState.push(nodeState)
+    """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
+    #Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
+    #Del profesor Edwin Villanueva Talavera
+    node = (problem.getStartState(),[])
+    frontierNode = util.Queue()
+    explored = []
+    frontierNode.push(node)
 
-	explored = []
+    while(True):
+        if frontierNode.isEmpty():
+        	return None
 
-	#print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-	#print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    	node = frontierNode.pop()
 
-	while True:
-	    if (frontierState.isEmpty()):
-	        return None
-	    tNode = frontierNode.pop()
-	    if(problem.isGoalState(tNode[0])):
-	        return solution(tNode)
+        if(problem.isGoalState(node[0])):
+        	return node[1]
 
-	    explored.append(tNode[0])
-	    
-	    for action in problem.getSuccessors(tNode[0]) :
-	        childState = action[0]
-	        childParent = tNode
-	        childAction = action[1]
-	        childNode = (childState,childParent,childAction)
-	        if (childState not in explored) and (childState not in frontierState.list):
-	            frontierNode.push(childNode)
-	            frontierState.push(childState)
+    	explored.append(node[0])
+
+    	for action in problem.getSuccessors(node[0]):
+    		
+    		stateList = [x[0] for x in frontierNode.list]
+    		if(action[0] not in explored) and (action[0] not in stateList):
+    			newActionList = node[1] + [action[1]]
+    			frontierNode.push((action[0],newActionList))
+
+    return None
 
 def solution(node):
     result = []
