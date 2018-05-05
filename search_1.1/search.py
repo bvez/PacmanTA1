@@ -174,7 +174,7 @@ def solution(node):
     while tNode[1] is not None:
         result.insert(0,tNode[2]) #se coloca de forma invertida
         tNode = tNode[1]
-
+    print result
     return result
 
 def uniformCostSearch(problem):
@@ -311,13 +311,38 @@ def bidirectionalSearch(problem):
 
         	#for p in frontierNodeGoal.list :
 
-        	print "1 fronteraGoal",node1[0],[x[0] for x in frontierNodeGoal.list]
-        	print "se revisa el estado ",node1[0],"en la lista ",[x[0] for x in frontierNodeGoal.list]
+        	#print "1 fronteraGoal",node1[0],[x[0] for x in frontierNodeGoal.list]
+        	#print "se revisa el estado ",node1[0],"en la lista ",[x[0] for x in frontierNodeGoal.list]
+        	
+        	sucesores = problem.getSuccessors(node1[0])
+
+        	#if (node1[0])
+        	for sucesor in sucesores:
+        		print sucesor
+
+        		#sucesor es (estado,accion,costo)
+
+        		#print "1 se busca", sucesor[0], "en", [x[0] for x in frontierNodeGoal.list]
+        		listaPrimerasComponentes = [x[0] for x in frontierNodeGoal.list]
+        		if(sucesor[0] in listaPrimerasComponentes):
+        			#node2[1].reverse()
+        			#invertirDireccionesListaAcciones(node2[1])
+        			indAcciones = listaPrimerasComponentes.index(sucesor[0])
+        			accionesResult = frontierNodeGoal.list[indAcciones]
+        			accionesResult[1].reverse()
+        			invertirDireccionesListaAcciones(accionesResult[1])
+        			print accionesResult[1]
+        			#print node1[1]
+        			#print node2[1]
+
+        			#return node1[1]+node2[1]
+        			return node1[1]+ [sucesor[1]] + accionesResult[1]
+
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
         		print "resolvio1"
         		return node1[1]+node2[1]
-        	sucesores = problem.getSuccessors(node1[0])
-        	print "sucesores1",node1[0],[x[0] for x in sucesores]
+        	
+        	#print "sucesores1",node1[0],[x[0] for x in sucesores]
         	#print "1 Sucesores del estado ",node1[0],sucesores
         	for action in sucesores:
         		node2 = (action[0], node1[1] + [action[1]]) #completar la lista de acciones
@@ -330,13 +355,32 @@ def bidirectionalSearch(problem):
 		#print frontierNodeGoal.list
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
-        	print "2 fronteraInitial",node2[0],[x[0] for x in frontierNodeInitial.list]
-        	print "se revisa el estado ",node2[0],"en la lista ",[x[0] for x in frontierNodeInitial.list]
+        	#print "2 fronteraInitial",node2[0],[x[0] for x in frontierNodeInitial.list]
+        	#print "se revisa el estado ",node2[0],"en la lista ",[x[0] for x in frontierNodeInitial.list]
+        	
+        	sucesores = problem.getSuccessorsInv(node2[0])
+
+        	for sucesor in sucesores:
+        		#print "2 se busca", sucesor[0], "en", [x[0] for x in frontierNodeInitial.list]
+        		listaPrimerasComponentes = [x[0] for x in frontierNodeInitial.list]
+
+        		if(sucesor[0] in listaPrimerasComponentes):
+        			#node2[1].reverse()
+        			#invertirDireccionesListaAcciones(node2[1])
+        			indAcciones = listaPrimerasComponentes.index(sucesor[0])
+        			accionesResult = frontierNodeInitial.list[indAcciones]
+        			print accionesResult
+        			#print node1[1]
+        			#print node2[1]
+
+        			#return node1[1]+node2[1]
+        			return accionesResult[1]
+
         	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
         		print "resolvio2"
         		return node1[1]+node2[1]
-        	sucesores = problem.getSuccessorsInv(node2[0])
-        	print "sucesores2",node2[0],[x[0] for x in sucesores]
+        	
+        	#print "sucesores2",node2[0],[x[0] for x in sucesores]
         	#print "2 Sucesores del estado ",node2[0],sucesores
         	for action in sucesores:
         		node1 = (action[0], node2[1] + [action[1]])#completar la lista de acciones
@@ -349,6 +393,17 @@ def bidirectionalSearch(problem):
 	#if()
     return None
 
+
+def invertirDireccionesListaAcciones(lista):
+	for i in range(len(lista)):
+		if(lista[i] == 'North'):
+			lista[i] = 'South'
+		elif(lista[i] == 'South'):
+			lista[i] = 'North'
+		elif(lista[i] == 'East'):
+			lista[i] = 'West'
+		else:
+			lista[i] = 'East'
 
 # Abbreviations
 bfs = breadthFirstSearch
