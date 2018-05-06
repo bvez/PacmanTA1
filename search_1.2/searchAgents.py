@@ -407,7 +407,7 @@ class CornersProblem(search.SearchProblem):
                 
                 listaEsquinas=[]
                 for i in range(len(state[1])):
-                    listaEsquinas.append(state[1][i])
+                    listaEsquinas.insert(0,state[1][i])
 
                 for esquinas in self.corners:
                 #for esquinas in self.corners:

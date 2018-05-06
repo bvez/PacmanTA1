@@ -86,49 +86,39 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
+
+
     "*** YOUR CODE HERE ***"
     #Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
     #Del profesor Edwin Villanueva Talavera
-    nodeState = problem.getStartState()
-    nodeParent = None
-    nodeAction = None
-    tNode = (nodeState,nodeParent,nodeAction)
-
+    node =(problem.getStartState(),[])
     frontierNode = util.Stack()
-    frontierState = util.Stack()
-    frontierNode.push(tNode)
-    frontierState.push(nodeState)
-
     explored = []
-    
-    #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    #print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    frontierNode.push(node)
 
     while True:
-    	if (frontierState.isEmpty()):
-    		return None
-    	tNode = frontierNode.pop()
-    	if(problem.isGoalState(tNode[0])):
-    		return solution(tNode)
-
-    	explored.append(tNode[0])
     	
-        for action in problem.getSuccessors(tNode[0]) :
-    		childState = action[0]
-    		childParent = tNode
-    		childAction = action[1]
-    		childNode = (childState,childParent,childAction)
-    		if (childState not in explored) and (childState not in frontierState.list):
-    			frontierNode.push(childNode)
-    			frontierState.push(childState)
+    	if(frontierNode.isEmpty()):
+    		return None
 
-    #util.raiseNotDefined()
+    	node = frontierNode.pop()
+    	if(problem.isGoalState(node[0])):
+    		return node[1]
+
+    	explored.append(node[0])
+
+    	for action in problem.getSuccessors(node[0]):
+    		stateList = [x[0] for x in frontierNode.list]
+
+    		if(action[0] not in explored) and (action[0] not in stateList):
+    			newActionList = node[1] + [action[1]]
+    			frontierNode.push( (action[0],newActionList) )
+
+    return None
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    #Se esta utilizando como referencia el codigo de las diapositivas "Unidad 2" del curso "Aplicaciones de Ciencias de la Computacion(Inteligencia Artificial)"
-    #Del profesor Edwin Villanueva Talavera
     node = (problem.getStartState(),[])
     frontierNode = util.Queue()
     explored = []
@@ -206,41 +196,56 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    node = (problem.getStartState(),[])
+    frontier = util.PriorityQueue()
+    frontier.push(node,0)
+    explored = []
+
+    while True:
+    	if(frontier.isEmpty()):
+    		return None
+
+    	node = frontier.pop()
+
+    	if problem.isGoalState(node[0]):
+    		return node[1]
+
+    	if node[0] not in explored:
+    		
+    		for action in problem.getSuccessors(node[0]):
+    			if action[0] not in explored:
+    				newActionList = node[1] + [action[1]]
+    				newNode = (action[0],newActionList)
+    				funcionOrden = problem.getCostOfActions(newActionList) + heuristic(newNode[0],problem)
+    				frontier.push(newNode,funcionOrden)
+
+    	explored.append(node[0])
+
     util.raiseNotDefined()
 
 
 def recursiveDLS(node,problem,limit,explored):
-    #node es un triple que se compone de estado, padre y accion
-    #print "Nodo: ",node[0]
-
-    #adicional
-    #explored.append(node[0])
-    #fin adicional
 
     if problem.isGoalState(node[0]):
-        return solution(node)
+        return node[1]
     elif node[0] in explored:
-    	#print "explorado"
     	return "exploredNode"
     elif limit==0:
         return "cutoff"
     else:
-    	#print "hola"
     	explored.append(node[0])
         cutoff_ocurred = False
         for action in problem.getSuccessors(node[0]):
-            childState = action[0]
-            childParent = node
-            childAction = action[1]
-            childNode = (childState,childParent,childAction)
+            newActionList = node[1] + [action[1]]
+            newNode = (action[0],newActionList)
 
-            result = recursiveDLS(childNode,problem,limit-1,explored)
+            result = recursiveDLS(newNode,problem,limit-1,explored)
             if result == "cutoff":
                 cutoff_ocurred=True
-            #adicional
+
             elif result == "exploredNode":
             	continue
-            #fin adicional
+
             elif result != "failure":
                 return result
         if cutoff_ocurred:
@@ -249,15 +254,12 @@ def recursiveDLS(node,problem,limit,explored):
             return "failure"
 
 def depthLimitedSearch(problem,limit):
-    nodeState = problem.getStartState()
-    nodeParent = None
-    nodeAction = None
-    node = (nodeState,nodeParent,nodeAction)
+    node = (problem.getStartState(),[])
     explored = []
     return recursiveDLS(node,problem,limit,explored)
 
 def iDeepeningSearch(problem):
-    depth = 190
+    depth = 0
     while True:
         result = depthLimitedSearch(problem,depth)
         depth += 1
@@ -304,11 +306,13 @@ def bidirectionalSearch(problem):
 
         	#if (node1[0])
         	for sucesor in sucesores:
-        		print sucesor
+        		#print sucesor
 
         		#sucesor es (estado,accion,costo)
 
-        		print "1 se busca", sucesor[0], "en", [x[0] for x in frontierNodeGoal.list]
+        		#print "1 se busca", sucesor[0], "en", [x[0] for x in frontierNodeGoal.list]
+
+
         		listaPrimerasComponentes = [x[0] for x in frontierNodeGoal.list]
         		if(sucesor[0] in listaPrimerasComponentes):
         			#node2[1].reverse()
@@ -317,7 +321,9 @@ def bidirectionalSearch(problem):
         			accionesResult = frontierNodeGoal.list[indAcciones]
         			accionesResult[1].reverse()
         			invertirDireccionesListaAcciones(accionesResult[1])
+        			
         			print accionesResult[1]
+
         			#print node1[1]
         			#print node2[1]
 
@@ -326,6 +332,13 @@ def bidirectionalSearch(problem):
 
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
         		print "resolvio1"
+        		
+
+        		#node2[1].reverse()
+        		#invertirDireccionesListaAcciones(node2[1])
+        		print node1[1]
+        		print node2[1]
+
         		return node1[1]+node2[1]
         	
         	#print "sucesores1",node1[0],[x[0] for x in sucesores]
@@ -339,6 +352,11 @@ def bidirectionalSearch(problem):
         		#else:
         			#resolve duplicate node2
 		#print frontierNodeGoal.list
+        
+
+
+
+
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
         	#print "2 fronteraInitial",node2[0],[x[0] for x in frontierNodeInitial.list]
@@ -347,7 +365,9 @@ def bidirectionalSearch(problem):
         	sucesores = problem.getSuccessorsInv(node2[0])
 
         	for sucesor in sucesores:
-        		print "2 se busca", sucesor[0], "en", [x[0] for x in frontierNodeInitial.list]
+        		
+        		#print "2 se busca", sucesor[0], "en", [x[0] for x in frontierNodeInitial.list]
+
         		listaPrimerasComponentes = [x[0] for x in frontierNodeInitial.list]
 
         		if(sucesor[0] in listaPrimerasComponentes):
@@ -364,8 +384,11 @@ def bidirectionalSearch(problem):
 
         	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
         		print "resolvio2"
-        		#print node1
-        		#print node2
+        		
+        		#node2[1].reverse()
+        		#invertirDireccionesListaAcciones(node2[1])
+        		print node1[1]
+        		print node2[1]
         		return node1[1]+node2[1]
         	
         	#print "sucesores2",node2[0],[x[0] for x in sucesores]
@@ -378,7 +401,6 @@ def bidirectionalSearch(problem):
         			#print "frontera2 ",frontierNodeGoal.list
         		#else:
         			#resolve duplicate node1
-	#if()
     return None
 
 
