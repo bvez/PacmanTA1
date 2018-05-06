@@ -341,7 +341,7 @@ def bidirectionalSearch(problem):
         		print node1[1]
         		print node2[1]
 
-        		return node1[1]+node2[1]
+        		return node1[1]
         	
         	#print "sucesores1",node1[0],[x[0] for x in sucesores]
         	#print "1 Sucesores del estado ",node1[0],sucesores
@@ -391,10 +391,10 @@ def bidirectionalSearch(problem):
         		print "resolvio2_CON ISGOALSTATE"
         		print problem.isGoalStateInv(node2[0])
         		print node2[0]
-        		#invertirDireccionesListaAcciones(node2[1])
+        		invertirDireccionesListaAcciones(node2[1])
         		print node1[1]
         		print node2[1]
-        		return node1[1] +node2[1]
+        		return node2[1]
         	
         	#print "sucesores2",node2[0],[x[0] for x in sucesores]
         	#print "2 Sucesores del estado ",node2[0],sucesores
