@@ -319,11 +319,17 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         #el estado inicial se compone de la posicion inicial Y de las esquinas que le faltan visitar
-        return (self.startingPosition,[self.corners[0],self.corners[1],self.corners[2],self.corners[3] ])
+        cornersSinExplorar = [self.corners[0],self.corners[1],self.corners[2],self.corners[3]]
+        if (self.startingPosition in cornersSinExplorar):
+        	cornersSinExplorar.remove(self.startingPosition)
+        return (self.startingPosition,cornersSinExplorar)
         #return (self.starting position,[])
 
 
-    def getStartStateInv(self):
+    def getStartStateInv(self):        
+        cornersExplorados = [self.corners[0],self.corners[1],self.corners[2],self.corners[3]]
+        if (self.startingPosition in cornersExplorados):
+        	return (self.startingPosition,[(self.startingPosition)])
         return (self.startingPosition,[])
 
     def isGoalState(self, state):
@@ -386,7 +392,6 @@ class CornersProblem(search.SearchProblem):
 	                if (esquinas[0] == nextx) and (nexty == esquinas[1]):
 						listaEsquinas.remove((nextx,nexty))
 
-
 	            nextState = ((nextx,nexty),listaEsquinas)                                                                     
 	            successors.append((nextState,action,1))
 
@@ -411,7 +416,7 @@ class CornersProblem(search.SearchProblem):
 
                 for esquinas in self.corners:
                 #for esquinas in self.corners:
-                    if esquinas[0] == nextx and nexty == esquinas[1] and (nextx,nexty) not in state[1]:
+                    if esquinas[0] == nextx and nexty == esquinas[1] and (nextx,nexty) not in listaEsquinas:
 
                         listaEsquinas.insert(0,(nextx,nexty))
                         #append

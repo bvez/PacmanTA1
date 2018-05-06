@@ -336,8 +336,8 @@ def bidirectionalSearch(problem):
         		print "resolvio1_CON ISGOALSTATE"
         		
 
-        		#node2[1].reverse()
-        		#invertirDireccionesListaAcciones(node2[1])
+        		node2[1].reverse()
+        		invertirDireccionesListaAcciones(node2[1])
         		print node1[1]
         		print node2[1]
 
@@ -379,12 +379,11 @@ def bidirectionalSearch(problem):
 
         			#return node1[1]+ [sucesor[1]] + accionesResult[1]
         			#print node2[1]
-
+        
         			#return node1[1]+node2[1] 
-        			print node1[1]
-        			print sucesor[1]
-        			print accionesResult[1]
-
+        			print "nodo1 ", node1[1]
+        			print "nodoooo: " , node1[0]
+        			print "acciones ",accionesResult[1]
         			#return node1[1]
         			return node1[1] + accionesResult[1]
 
