@@ -324,10 +324,13 @@ def bidirectionalSearch(problem):
         			print accionesResult[1]
 
         			#print node1[1]
-        			print "resolvio2_CON SUCESORES"
+        			print "resolvio1_CON SUCESORES"
 
         			#return node1[1]+node2[1]
-        			return node1[1]+ [sucesor[1]] + accionesResult[1]
+        			print node1[1]
+        			print sucesor[1]
+        			print accionesResult[1]
+        			return node1[1] + [sucesor[1]] + accionesResult[1]
 
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
         		print "resolvio1_CON ISGOALSTATE"
@@ -370,12 +373,20 @@ def bidirectionalSearch(problem):
         			print "resolvio2_CON SUCESORES"
         			indAcciones = listaPrimerasComponentes.index(sucesor[0])
         			accionesResult = frontierNodeInitial.list[indAcciones]
-        			print accionesResult
+        			
+        			accionesResult[1].reverse()
+        			invertirDireccionesListaAcciones(accionesResult[1])
+
         			#return node1[1]+ [sucesor[1]] + accionesResult[1]
         			#print node2[1]
 
         			#return node1[1]+node2[1] 
-        			return accionesResult[1]
+        			print node1[1]
+        			print sucesor[1]
+        			print accionesResult[1]
+
+        			#return node1[1]
+        			return node1[1] + accionesResult[1]
 
         	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
         		print "resolvio2_CON ISGOALSTATE"
