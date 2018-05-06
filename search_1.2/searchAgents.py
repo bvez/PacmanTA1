@@ -407,13 +407,13 @@ class CornersProblem(search.SearchProblem):
                 
                 listaEsquinas=[]
                 for i in range(len(state[1])):
-                    listaEsquinas.insert(0,state[1][i])
+                    listaEsquinas.append(state[1][i])
 
                 for esquinas in self.corners:
                 #for esquinas in self.corners:
-                    if esquinas[0] == nextx and nexty == esquinas[1]:
+                    if esquinas[0] == nextx and nexty == esquinas[1] and (nextx,nexty) not in state[1]:
 
-                        listaEsquinas.append((nextx,nexty))
+                        listaEsquinas.insert(0,(nextx,nexty))
                         #append
 
                 nextState = ((nextx,nexty),listaEsquinas)                                                                     

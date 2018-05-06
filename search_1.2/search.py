@@ -312,7 +312,6 @@ def bidirectionalSearch(problem):
 
         		#print "1 se busca", sucesor[0], "en", [x[0] for x in frontierNodeGoal.list]
 
-
         		listaPrimerasComponentes = [x[0] for x in frontierNodeGoal.list]
         		if(sucesor[0] in listaPrimerasComponentes):
         			#node2[1].reverse()
@@ -325,13 +324,13 @@ def bidirectionalSearch(problem):
         			print accionesResult[1]
 
         			#print node1[1]
-        			#print node2[1]
+        			print "resolvio2_CON SUCESORES"
 
         			#return node1[1]+node2[1]
         			return node1[1]+ [sucesor[1]] + accionesResult[1]
 
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
-        		print "resolvio1"
+        		print "resolvio1_CON ISGOALSTATE"
         		
 
         		#node2[1].reverse()
@@ -352,10 +351,6 @@ def bidirectionalSearch(problem):
         		#else:
         			#resolve duplicate node2
 		#print frontierNodeGoal.list
-        
-
-
-
 
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
@@ -372,24 +367,24 @@ def bidirectionalSearch(problem):
 
         		if(sucesor[0] in listaPrimerasComponentes):
         			#node2[1].reverse()
-        			#invertirDireccionesListaAcciones(node2[1])
+        			print "resolvio2_CON SUCESORES"
         			indAcciones = listaPrimerasComponentes.index(sucesor[0])
         			accionesResult = frontierNodeInitial.list[indAcciones]
         			print accionesResult
-        			#print node1[1]
+        			#return node1[1]+ [sucesor[1]] + accionesResult[1]
         			#print node2[1]
 
-        			#return node1[1]+node2[1]
+        			#return node1[1]+node2[1] 
         			return accionesResult[1]
 
         	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
-        		print "resolvio2"
-        		
-        		#node2[1].reverse()
+        		print "resolvio2_CON ISGOALSTATE"
+        		print problem.isGoalStateInv(node2[0])
+        		print node2[0]
         		#invertirDireccionesListaAcciones(node2[1])
         		print node1[1]
         		print node2[1]
-        		return node1[1]+node2[1]
+        		return node1[1] +node2[1]
         	
         	#print "sucesores2",node2[0],[x[0] for x in sucesores]
         	#print "2 Sucesores del estado ",node2[0],sucesores
