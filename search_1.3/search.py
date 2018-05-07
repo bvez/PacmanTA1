@@ -95,7 +95,7 @@ def depthFirstSearch(problem):
     frontierNode = util.Stack()
     explored = []
     frontierNode.push(node)
-
+    ##i=0
     while True:
     	
     	if(frontierNode.isEmpty()):
@@ -109,10 +109,13 @@ def depthFirstSearch(problem):
 
     	for action in problem.getSuccessors(node[0]):
     		stateList = [x[0] for x in frontierNode.list]
+    		
 
     		if(action[0] not in explored) and (action[0] not in stateList):
     			newActionList = node[1] + [action[1]]
     			frontierNode.push( (action[0],newActionList) )
+    			##i=i+1
+    			##print (i)
 
     return None
 
