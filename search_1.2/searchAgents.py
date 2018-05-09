@@ -155,7 +155,18 @@ class PositionSearchProblem(search.SearchProblem):
         self.walls = gameState.getWalls()
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
-        self.goal = goal
+        self.goal = goal= startingGameState.getWalls()
+        self.startingPosition = startingGameState.getPacmanPosition()
+        top, right = self.walls.height-2, self.walls.width-2
+        self.corners = ((1,1), (1,top), (right, 1), (right, top))
+        for corner in self.corners:
+            if not startingGameState.hasFood(*corner):
+                print 'Warning: no food in corner ' + str(corner)
+        self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
+        # Please add any code here which you would like to use
+        # in initializing the problem
+        "*** YOUR CODE HERE ***"
+        self.posIniX,self.posIniY = self.startingPosition
         self.costFn = costFn
         self.visualize = visualize
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
@@ -287,6 +298,41 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
+class CornersGreedySearchAgent(SearchAgent):
+           
+    def registerInitialState(self, state):
+        self.actions = []
+        currentState = state
+        while(currentState.getFood().count() > 0):
+            nextPathSegment = self.findPathToClosestDot(currentState) # The missing piece
+            self.actions += nextPathSegment
+            for action in nextPathSegment:
+                legal = currentState.getLegalActions()
+                print action
+                print currentState
+                if action not in legal:
+                    t = (str(action), str(currentState))
+                    raise Exception, 'findPathToClosestDot returned an illegal move: %s!\n%s' % t
+                currentState = currentState.generateSuccessor(0, action)
+        self.actionIndex = 0
+        print 'Path found with cost %d.' % len(self.actions)
+
+    def findPathToClosestDot(self, gameState):
+        """
+        Returns a path (a list of actions) to the closest dot, starting from
+        gameState.
+        """
+        # Here are some useful elements of the startState
+        startPosition = gameState.getPacmanPosition()
+        food = gameState.getFood()
+        walls = gameState.getWalls()
+        problem = CornersProblem(gameState)
+
+        "*** YOUR CODE HERE ***"
+        foods = food.asList()
+        #BFS encuentra el punto mas cercano
+        path = search.breadthFirstSearch(problem)
+        return path
 
 class CornersProblem(search.SearchProblem):
     """
@@ -555,7 +601,7 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     return 0
-
+"""
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
     def registerInitialState(self, state):
@@ -574,10 +620,10 @@ class ClosestDotSearchAgent(SearchAgent):
         print 'Path found with cost %d.' % len(self.actions)
 
     def findPathToClosestDot(self, gameState):
-        """
+        ""
         Returns a path (a list of actions) to the closest dot, starting from
         gameState.
-        """
+        ""
         # Here are some useful elements of the startState
         startPosition = gameState.getPacmanPosition()
         food = gameState.getFood()
@@ -585,8 +631,11 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        foods = food.asList()
+        #BFS encuentra el punto mas cercano
+        path = search.breadthFirstSearch(problem)
+        return path
+"""
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
     A search problem for finding a path to any food.
@@ -612,6 +661,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         self.startState = gameState.getPacmanPosition()
         self.costFn = lambda x: 1
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
+        self.posIniX,self.posIniY = self.startState
 
     def isGoalState(self, state):
         """
@@ -619,9 +669,24 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        foods = self.food.asList()
+        if(len(foods)==1 and state in foods): #llego al final, se "agrega comida" al punto inicial para que regrese
+            foods.append((self.posIniX,self.posIniY))
+           # del foods[0]
+        if state in foods:
+            isGoal = True
+        else:
+            isGoal = False
+        print state
+        print foods
+        print self.posIniX
+        print self.posIniY
+        # For display purposes only
+        if isGoal:
+            self._visitedlist.append(state)
+       
+        return isGoal 
 
 def mazeDistance(point1, point2, gameState):
     """
