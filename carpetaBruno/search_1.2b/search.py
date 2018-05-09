@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -102,7 +102,7 @@ def depthFirstSearch(problem):
     frontierState.push(nodeState)
 
     explored = []
-    
+
     #print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
 
@@ -114,7 +114,7 @@ def depthFirstSearch(problem):
             return solution(tNode)
 
         explored.append(tNode[0])
-        
+
         for action in problem.getSuccessors(tNode[0]) :
             childState = action[0]
             childParent = tNode
@@ -144,7 +144,7 @@ def breadthFirstSearch(problem):
     	explored.append(node[0])
 
     	for action in problem.getSuccessors(node[0]):
-    		
+
     		stateList = [x[0] for x in frontierNode.list]
     		if(action[0] not in explored) and (action[0] not in stateList):
     			newActionList = node[1] + [action[1]]
@@ -158,7 +158,7 @@ def solution(node):
     while tNode[1] is not None:
         result.insert(0,tNode[2]) #se coloca de forma invertida
         tNode = tNode[1]
-    print result
+    #print result
     return result
 
 def uniformCostSearch(problem):
@@ -181,7 +181,7 @@ def uniformCostSearch(problem):
     		successors = problem.getSuccessors(tNode[0])
     		for action in successors:
     			nextState = action[0]
-    			
+
     			if nextState not in explored:
     				newAction = action[1]
     				newActionList = tNode[1] + [newAction] #se anade la accion realizada a lista de acciones del nodo
@@ -274,7 +274,7 @@ def iDeepeningSearch(problem):
         result = depthLimitedSearch(problem,depth)
         depth += 1
         if result != "cutoff":
-        	print depth-1
+        	#print depth-1
         	return result
 
 
@@ -302,7 +302,7 @@ def bidirectionalSearch(problem):
 
         if not(frontierNodeInitial.isEmpty()):
         	node1 = frontierNodeInitial.pop()
-        	
+
         	sucesores = problem.getSuccessors(node1[0])
 
         	for sucesor in sucesores:
@@ -312,13 +312,9 @@ def bidirectionalSearch(problem):
         			accionesResult = frontierNodeGoal.list[indAcciones]
         			accionesResult[1].reverse()
         			invertirDireccionesListaAcciones(accionesResult[1])
-        			
-        			print accionesResult[1]
-        			print "resolvio1_CON SUCESORES"
-        			return node1[1] + [sucesor[1]] + accionesResult[1]
+
 
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
-        		print "resolvio1_CON ISGOALSTATE"
         		node2[1].reverse()
         		invertirDireccionesListaAcciones(node2[1])
 
@@ -332,24 +328,21 @@ def bidirectionalSearch(problem):
 
         if not(frontierNodeGoal.isEmpty()):
         	node2 = frontierNodeGoal.pop()
-        	
+
         	sucesores = problem.getSuccessorsInv(node2[0])
 
         	for sucesor in sucesores:
         		listaPrimerasComponentes = [x[0] for x in frontierNodeInitial.list]
 
         		if(sucesor[0] in listaPrimerasComponentes):
-        			print "resolvio2_CON SUCESORES"
         			indAcciones = listaPrimerasComponentes.index(sucesor[0])
         			accionesResult = frontierNodeInitial.list[indAcciones]
-        			
+
         			accionesResult[1].reverse()
         			invertirDireccionesListaAcciones(accionesResult[1])
         			return node1[1] + accionesResult[1]
 
         	if problem.isGoalStateInv(node2[0]) or (node2[0] in [x[0] for x in frontierNodeInitial.list]):
-        		print "resolvio2_CON ISGOALSTATE"
-        		print problem.isGoalStateInv(node2[0])
         		invertirDireccionesListaAcciones(node2[1])
         		return node2[1]
 
