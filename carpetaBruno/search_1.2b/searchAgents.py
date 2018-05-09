@@ -523,12 +523,14 @@ def cornersHeuristic(state, problem):
     admissible (as well as consistent).
     """
     
+
+    """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
     remainingCorners = []
-    visitedCorners = state[1]
+    visitedCorners = state[1] #lo saca del estado actual(es el segundo argumento)
     currentNode = state[0]
     result = 0
 
@@ -542,8 +544,9 @@ def cornersHeuristic(state, problem):
     	minDistance = 999999
         
     	for curCorner in remainingCorners:
-            distance = util.manhattanDistance(currentNode,curCorner)
+            #distance = euclideanDistance(currentNode,curCorner)
             #distance = 0
+            distance = util.manhattanDistance(currentNode,curCorner)
             if distance < minDistance:
             	minDistance = distance
             	minCorner = curCorner
@@ -555,8 +558,80 @@ def cornersHeuristic(state, problem):
     #print result
     return result # Default to trivial solution    
 
+    """
+
+    """corners = problem.corners # These are the corner coordinates
+    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+
+    "*** YOUR CODE HERE ***"
+    remainingCorners = state[1] #lo saca del estado actual(es el segundo argumento)
+    visitedCorners = []
+    currentNode = state[0]
+    result = 0
+
+    #se inicializa la variable de esquinas restantes
+    for curCorner in corners:
+        if not curCorner in remainingCorners:
+            visitedCorners.append(curCorner)
+
+
+    while(remainingCorners):
+        minDistance = 999999
+        
+        for curCorner in remainingCorners:
+            #distance = euclideanDistance(currentNode,curCorner)
+            #distance = 0
+            distance = util.manhattanDistance(currentNode,curCorner)
+            if distance < minDistance:
+                minDistance = distance
+                minCorner = curCorner
+        
+        result = result + minDistance
+        currentNode = minCorner
+        remainingCorners.remove(minCorner)
+
+    #print result
+    return result # Default to trivial solution"""
+
+
+    corners = problem.corners # These are the corner coordinates
+    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+
+    remainingCorners = state[1] #lo saca del estado actual(es el segundo argumento)
+    visitedCorners = []
+    currentNode = state[0]
+    result = 0
+    results =[]
+
+    hola =[]
+    for i in remainingCorners:
+        hola.append(i)
+
+    for i in range(len(remainingCorners)):
+        results.append( util.manhattanDistance(remainingCorners[i],currentNode) )
+
+    indice = 0
+    if (results):
+        result = min(results) #se obtiene la menor distancia y su indice
+        indice = results.index(result)
+        curNode = hola[indice]
+        del(hola[indice])  #se elimina la esquina con menor distancia desde el nodo 
+
+    
+
+    while(hola):
+        (minDist,indice) = min( [(util.manhattanDistance(curNode,x) , hola.index(x)) for x in hola] )
+        result += minDist
+        del(hola[indice])
+    
+
+    return result
+
+
+
+
 def euclideanDistance(xy1,xy2):
-    return  xy1[0] - xy2[0]  + xy1[1] - xy2[1]
+    return  ((xy1[0] - xy2[0])**2  + (xy1[1] - xy2[1])**2)**0.5
 
 
     """

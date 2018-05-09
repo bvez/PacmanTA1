@@ -158,6 +158,12 @@ class PositionSearchProblem(search.SearchProblem):
         self.walls = gameState.getWalls()
         self.startState = gameState.getPacmanPosition()
         if start != None: self.startState = start
+        
+        """
+
+        #PARTE CAMBIADA
+
+
         self.goal = goal= startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
@@ -170,8 +176,17 @@ class PositionSearchProblem(search.SearchProblem):
         # in initializing the problem
         "*** YOUR CODE HERE ***"
         self.posIniX,self.posIniY = self.startingPosition
+        
+
+        #FIN PARTE CAMBIADA
+        
+
+
+        """
+
+        self.goal = goal
         self.costFn = costFn
-        self.visualize = visualize
+        self.visualize = visualize    
         if warn and (gameState.getNumFood() != 1 or not gameState.hasFood(*goal)):
             print 'Warning: this does not look like a regular search maze'
 

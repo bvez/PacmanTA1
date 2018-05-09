@@ -290,7 +290,7 @@ class ClassicGameRules:
 
     def win( self, state, game ):
         if not self.quiet: print "Pacman emerges victorious! Score: %d" % state.data.score
-        game.gameOver = False
+        game.gameOver = True
 
     def lose( self, state, game ):
         if not self.quiet: print "Pacman died! Score: %d" % state.data.score
@@ -366,8 +366,16 @@ class PacmanRules:
             state.data._foodEaten = position
             # TODO: cache numFood?
             numFood = state.getNumFood()
-            if numFood == 0 and not state.data._lose:
-                state.data.scoreChange += 500
+
+            ini = state.data.layout.agentPositions[0][1]
+
+            if (numFood==0  and ( state.data.layout.agentPositions[0][1] != position)):
+                state.data.food[ini[0]][ini[1]] = True
+
+            
+            if numFood == 0 and ( state.data.layout.agentPositions[0][1] == position) :
+            #if numFood == 0 and not state.data._lose :
+                state.data.scoreChange += 500 
                 state.data._win = True
         # Eat capsule
         if( position in state.getCapsules() ):
