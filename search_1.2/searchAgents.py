@@ -41,6 +41,9 @@ import util
 import time
 import search
 
+listaEstados=[]
+indi=[]
+
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -301,6 +304,8 @@ def euclideanHeuristic(position, problem, info={}):
 class CornersGreedySearchAgent(SearchAgent):
            
     def registerInitialState(self, state):
+        listaEstados.append(state.getPacmanPosition())
+        indi.append(0)
         self.actions = []
         currentState = state
         while(currentState.getFood().count() > 0):
@@ -326,7 +331,7 @@ class CornersGreedySearchAgent(SearchAgent):
         startPosition = gameState.getPacmanPosition()
         food = gameState.getFood()
         walls = gameState.getWalls()
-        problem = CornersProblem(gameState)
+        problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
         foods = food.asList()
@@ -530,6 +535,7 @@ class FoodSearchProblem:
         self._expanded = 0 # DO NOT CHANGE
         self.heuristicInfo = {} # A dictionary for the heuristic to store information
 
+
     def getStartState(self):
         return self.start
 
@@ -661,7 +667,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         self.startState = gameState.getPacmanPosition()
         self.costFn = lambda x: 1
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
-        self.posIniX,self.posIniY = self.startState
 
     def isGoalState(self, state):
         """
@@ -670,18 +675,22 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
         "*** YOUR CODE HERE ***"
-        foods = self.food.asList()
-        if(len(foods)==1 and state in foods): #llego al final, se "agrega comida" al punto inicial para que regrese
-            foods.append((self.posIniX,self.posIniY))
-           # del foods[0]
+        
+        if(indi[0]==0):
+            foods = self.food.asList()
+            indi[0]=1
+        if (len(foods)==4):
+            foods.append(listaEstados[0])
+
         if state in foods:
             isGoal = True
         else:
             isGoal = False
         print state
         print foods
-        print self.posIniX
-        print self.posIniY
+        #print self.posIniX
+        #print self.posIniY
+        print listaEstados
         # For display purposes only
         if isGoal:
             self._visitedlist.append(state)
