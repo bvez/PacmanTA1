@@ -735,7 +735,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
             self._visitedlist.append(state)
 
         return isGoal
-
+        
 def mazeDistance(point1, point2, gameState):
     """
     Returns the maze distance between any two points, using the search functions
