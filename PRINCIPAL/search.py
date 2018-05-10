@@ -304,7 +304,7 @@ def iDeepeningSearch(problem):
         result = depthLimitedSearch(problem,depth)
         depth += 1
         if result != "cutoff":
-        	#print depth-1
+        	print depth-1
         	return result
 
 

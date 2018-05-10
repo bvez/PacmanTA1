@@ -13,7 +13,7 @@ python pacman.py -l bigCorners -p SearchAgent -a fn=ucs,prob=CornersProblem -z 0
 
 echo "Se analizara el AStarCornersAgent en mediumCorners"
 
-python pacman.py -l mediumCorners -p AStarCornersAgpython pacman.py -l mediumCorners -p CornersGreedySearchAgent -a fn=bfs,prob=CornersProblement
+python pacman.py -l mediumCorners -p AStarCornersAgent
 
 echo "Se analizara el AStarCornersAgent en mediumCorners"
 
