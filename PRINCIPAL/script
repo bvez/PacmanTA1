@@ -1,0 +1,22 @@
+echo "Se prueban las funciones de busqueda con CornersProblem"
+python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem
+python pacman.py -l mediumCorners -p SearchAgent -a fn=dfs,prob=CornersProblem
+python pacman.py -l mediumCorners -p SearchAgent -a fn=bs,prob=CornersProblem
+python pacman.py -l mediumCorners -p SearchAgent -a fn=ids,prob=CornersProblem
+python pacman.py -l mediumCorners -p SearchAgent -a fn=ucs,prob=CornersProblem
+
+python pacman.py -l bigCorners -p SearchAgent -a fn=bfs,prob=CornersProblem -z 0.5
+python pacman.py -l bigCorners -p SearchAgent -a fn=dfs,prob=CornersProblem -z 0.5
+python pacman.py -l bigCorners -p SearchAgent -a fn=bs,prob=CornersProblem -z 0.5
+python pacman.py -l bigCorners -p SearchAgent -a fn=ids,prob=CornersProblem -z 0.5
+python pacman.py -l bigCorners -p SearchAgent -a fn=ucs,prob=CornersProblem -z 0.5
+
+echo "Se analizara el AStarCornersAgent en mediumCorners"
+
+python pacman.py -l mediumCorners -p AStarCornersAgpython pacman.py -l mediumCorners -p CornersGreedySearchAgent -a fn=bfs,prob=CornersProblement
+
+echo "Se analizara el AStarCornersAgent en mediumCorners"
+
+python pacman.py -l bigCorners -p AStarCornersAgent -z 0.5
+
+python pacman.py -l mediumCorners -p CornersGreedySearchAgent -a fn=bfs,prob=CornersProblem
