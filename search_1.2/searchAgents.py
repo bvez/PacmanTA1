@@ -41,9 +41,6 @@ import util
 import time
 import search
 
-listaEstados=[]
-indi=[]
-
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -304,12 +301,11 @@ def euclideanHeuristic(position, problem, info={}):
 class CornersGreedySearchAgent(SearchAgent):
            
     def registerInitialState(self, state):
-        listaEstados.append(state.getPacmanPosition())
-        indi.append(0)
         self.actions = []
         currentState = state
+        #solo seguira buscando mientras haya comida en las esquinas (no se como cambiar esto para que regrese a la pos ini)
         while(currentState.getFood().count() > 0):
-            nextPathSegment = self.findPathToClosestDot(currentState) # The missing piece
+            nextPathSegment = self.findPathToClosestDot(currentState) #con esto sacamos el camino a la comida mas cercana
             self.actions += nextPathSegment
             for action in nextPathSegment:
                 legal = currentState.getLegalActions()
@@ -331,6 +327,8 @@ class CornersGreedySearchAgent(SearchAgent):
         startPosition = gameState.getPacmanPosition()
         food = gameState.getFood()
         walls = gameState.getWalls()
+
+        #En el AnyFoodSearchProblem se define el Goal, que da true cuando come una fruta 
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
@@ -614,13 +612,13 @@ class ClosestDotSearchAgent(SearchAgent):
         self.actions = []
         currentState = state
         while(currentState.getFood().count() > 0):
-            nextPathSegment = self.findPathToClosestDot(currentState) # The missing piece
+            nextPathSegment = self.findPathToClosestDot(currentState)
             self.actions += nextPathSegment
             for action in nextPathSegment:
                 legal = currentState.getLegalActions()
                 if action not in legal:
                     t = (str(action), str(currentState))
-                    raise Exception, 'findPathToClosestDot returned an illegal move: %s!\n%s' % t
+                    raise Exception, 'findPathToClosestDot returned an illegal move: %s! %s' % t
                 currentState = currentState.generateSuccessor(0, action)
         self.actionIndex = 0
         print 'Path found with cost %d.' % len(self.actions)
@@ -637,10 +635,6 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        foods = food.asList()
-        #BFS encuentra el punto mas cercano
-        path = search.breadthFirstSearch(problem)
-        return path
 """
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -676,12 +670,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
         "*** YOUR CODE HERE ***"
         
-        if(indi[0]==0):
-            foods = self.food.asList()
-            indi[0]=1
-        if (len(foods)==4):
-            foods.append(listaEstados[0])
-
+        foods = self.food.asList()
         if state in foods:
             isGoal = True
         else:
@@ -690,7 +679,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         print foods
         #print self.posIniX
         #print self.posIniY
-        print listaEstados
+        #print listaEstados
         # For display purposes only
         if isGoal:
             self._visitedlist.append(state)
