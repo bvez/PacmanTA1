@@ -208,7 +208,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     frontier = util.PriorityQueue()
     frontier.push(node,0)
     explored = []
-
+    consistente = True
     while True:
         if(frontier.isEmpty()):
             return None
@@ -216,6 +216,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         node = frontier.pop()
 
         if problem.isGoalState(node[0]):
+            if(consistente):
+                print "La heuristica usada es consistente y por ende admisible"
             return node[1]
 
         if node[0] not in explored:
@@ -224,13 +226,41 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 if action[0] not in explored:
                     newActionList = node[1] + [action[1]]
                     newNode = (action[0],newActionList)
+
                     respuesta = heuristic(newNode[0],problem)
-                    #print respuesta
-                    funcionOrden = problem.getCostOfActions(newActionList) + respuesta
-                    #print funcionOrden
+                    costo =problem.getCostOfActions(newActionList)
+                    #respuestaAnterior = heuristic(new)
+
+                    if (newActionList):
+                    	ultimoMov = newActionList.pop()
+                    	newActionList.append(ultimoMov)
+                    	if(ultimoMov == "North"):
+                    		posAnterior = (newNode[0][0][0],newNode[0][0][1]-1)
+                    	elif(ultimoMov == "Sur"):
+                    		posAnterior = (newNode[0][0][0],newNode[0][0][1]+1)
+                    	elif (ultimoMov == "East"):
+                    		posAnterior = (newNode[0][0][0]-1,newNode[0][0][1])
+                    	else:
+                    		posAnterior = (newNode[0][0][0]+1,newNode[0][0][1])
+
+                    	lista=[]
+                    	if (newNode[0][0] in problem.corners):
+                    		for i in newNode[0][1]:
+                    			lista.append(i)
+                    		lista.append(newNode[0][0])
+                    	respuestaAnterior= heuristic([posAnterior,lista],problem)
+                    else:
+                    	respuestaAnterior=0
+
+                    if (respuestaAnterior > costo + respuesta ) :
+                    	print " No es admisible"
+                        consistente = False
+
+                    funcionOrden = costo + respuesta
                     frontier.push(newNode,funcionOrden)
 
         explored.append(node[0])
+
     util.raiseNotDefined()
 
 
@@ -312,7 +342,7 @@ def bidirectionalSearch(problem):
         			accionesResult = frontierNodeGoal.list[indAcciones]
         			accionesResult[1].reverse()
         			invertirDireccionesListaAcciones(accionesResult[1])
-
+        			return node1[1] + [sucesor[1]] + accionesResult[1]
 
         	if problem.isGoalState(node1[0]) or (node1[0] in [x[0] for x in frontierNodeGoal.list]): #verifica si llego al objetivo o si ya hay interseccion entre las fronteras
         		node2[1].reverse()
